@@ -2,7 +2,7 @@ name: CF IP Factory
 
 on:
   schedule:
-    - cron: '0 */2 * * *'  # 每 2 小时自动开工一次
+    - cron: '0 */4 * * *'  # 每 4 小时自动开工一次
   workflow_dispatch:      # 允许你手动点按钮立刻开工
 
 jobs:
