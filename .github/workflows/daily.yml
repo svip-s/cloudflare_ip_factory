@@ -1,0 +1,28 @@
+name: Daily Gold Miner
+on:
+  schedule:
+    - cron: '0 10 * * *' # 每天北京时间 18:00 运行
+  workflow_dispatch: # 支持手动触发
+
+jobs:
+  mine:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Run Miner
+        run: python scan_gold.py
+
+      - name: Commit Results
+        run: |
+          git config --global user.name "GoldBot"
+          git config --global user.email "bot@github.com"
+          git add all.txt
+          git commit -m "Update IP Source $(date)" || exit 0
+          git push
