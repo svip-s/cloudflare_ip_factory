@@ -1,12 +1,14 @@
-name: Daily Gold Miner
+name: Global IP Factory
 on:
   schedule:
     - cron: '0 10 * * *' # 每天北京时间 18:00 运行
-  workflow_dispatch: # 支持手动触发
+  workflow_dispatch: # 支持你手动点一下运行
 
 jobs:
-  mine:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -16,13 +18,16 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Run Miner
-        run: python scan_gold.py
+      - name: Install dependencies
+        run: pip install requests
 
-      - name: Commit Results
+      - name: Run Factory
+        run: python collect.py
+
+      - name: Commit and Push
         run: |
-          git config --global user.name "GoldBot"
+          git config --global user.name "IP-Bot"
           git config --global user.email "bot@github.com"
           git add all.txt
-          git commit -m "Update IP Source $(date)" || exit 0
+          git commit -m "Update IPs $(date)" || exit 0
           git push
