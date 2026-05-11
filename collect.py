@@ -43,9 +43,9 @@ def main():
                 if len(parts) < 2: continue
                 cidr, label = parts[0], parts[1]
                 net = ipaddress.ip_network(cidr)
-                # 每个网段随机抽 20 个 IP 试试运气
+                # 每个网段随机抽 100 个 IP 试试运气
                 hosts = list(net.hosts())
-                sampled = random.sample(hosts, min(len(hosts), 20))
+                sampled = random.sample(hosts, min(len(hosts), 100))
                 for ip in sampled:
                     for port in [443, 8443]:
                         if check_port(ip, port):
