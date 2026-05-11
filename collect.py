@@ -6,9 +6,7 @@ import random
 
 # 1. 进货摊位（在这里添加你想白嫖的源）
 SOURCES = [
-    "https://zip.cm.edu.kg/all.txt",
-    "https://raw.githubusercontent.com/ymyuuu/IPDB/main/cloudflare.txt",
-    "https://raw.githubusercontent.com/vfarid/cf-ip-ips/main/ips.txt"
+    "https://zip.cm.edu.kg/all.txt"
 ]
 
 def check_port(ip, port):
