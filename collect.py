@@ -4,7 +4,7 @@ import socket
 import ipaddress
 import random
 
-# 1. 进货摊位（在这里添加你想白嫖的源）
+# 1. 源地址
 SOURCES = [
     "https://zip.cm.edu.kg/all.txt"
 ]
@@ -23,10 +23,10 @@ def check_port(ip, port):
 def main():
     all_ips = set()
 
-    # --- 动作一：白嫖全网现成的 IP ---
+    # --- 动作一：获取 IP ---
     for url in SOURCES:
         try:
-            print(f"正在从 {url} 采购...")
+            print(f"正在从 {url} 获取...")
             res = requests.get(url, timeout=15)
             # 匹配 IP:PORT 或者 IP:PORT#TAG
             found = re.findall(r'\d+\.\d+\.\d+\.\d+:\d+(?:#\S+)?', res.text)
@@ -34,7 +34,7 @@ def main():
         except:
             print(f"源 {url} 访问失败")
 
-    # --- 动作二：定向扫射自己的网段 ---
+    # --- 动作二：定向扫描自己的网段 ---
     print("正在扫射私房网段...")
     try:
         with open("ip_list.txt", "r") as f:
@@ -51,12 +51,12 @@ def main():
                         if check_port(ip, port):
                             all_ips.add(f"{ip}:{port}#{label}")
     except Exception as e:
-        print(f"扫射出错: {e}")
+        print(f"扫描出错: {e}")
 
     # --- 动作三：保存战果 ---
     with open("all.txt", "w") as f:
         f.write("\n".join(list(all_ips)))
-    print(f"✅ 搞定！共捕获 {len(all_ips)} 个精英考生")
+    print(f"✅ 成功！共捕获 {len(all_ips)} 个 IP")
 
 if __name__ == "__main__":
     main()
