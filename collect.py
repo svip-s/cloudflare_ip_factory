@@ -54,7 +54,7 @@ def main():
         print(f"扫描出错: {e}")
 
     # --- 动作三：保存战果 ---
-    with open("all.txt", "w") as f:
+    with open("ips.txt", "w") as f:
         f.write("\n".join(list(all_ips)))
     print(f"✅ 成功！共捕获 {len(all_ips)} 个 IP")
 
