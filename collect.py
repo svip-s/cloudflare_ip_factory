@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # --- 配置 ---
 SOURCES = ["https://zip.cm.edu.kg/all.txt"]
-TEST_URL = "https://www.gstatic.com/generate_204" 
+TEST_URL = "http://www.gstatic.com/generate_204" 
 TIMEOUT = 5
 MAX_THREADS = 15
 
