@@ -1,10 +1,1 @@
-70.36.96.0/20 HK-Multacom
-68.64.160.0/19 US-Psychz
-47.74.0.0/15 HK-Alibaba
-8.208.0.0/12 SG-Alibaba
-68.183.128.0/17 SG-DO
-146.190.0.0/16 US-DO
-172.104.0.0/16 JP-Linode
-104.16.0.0/12 CF-Official  # Cloudflare 官方大段，虽然人多，但量大管饱
-162.158.0.0/15 CF-Official # 另一个官方大段
-103.149.92.0/22 HK-CMI      # 移动直连线路经常出现的网段，对你非常重要
+https://zip.cm.edu.kg/all.txt
