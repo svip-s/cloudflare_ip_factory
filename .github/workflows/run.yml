@@ -2,7 +2,7 @@ name: Global IP Factory
 
 on:
   schedule:
-    - cron: '51 4 * * *' # 每天北京时间 11:11 自动运行
+    - cron: '11 5 * * *' # 每天北京时间 11:11 自动运行
   workflow_dispatch: # 支持手动点击运行
 
 # 全局环境变量：强制指定 Node 24 运行环境，压制大部分弃用警告
