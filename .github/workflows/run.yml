@@ -4,7 +4,9 @@ on:
   schedule:
     - cron: '11 5 * * *' # 每天北京时间 11:11 自动运行
   workflow_dispatch: # 支持手动点击运行
-
+  push:
+    branches:
+      - main  # 只要有代码推送，就强制触发一次，顺便激活 cron
 # 全局环境变量：强制指定 Node 24 运行环境，压制大部分弃用警告
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
