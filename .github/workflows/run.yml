@@ -2,7 +2,7 @@ name: Global IP Factory
 
 on:
   schedule:
-    - cron: '11 5 * * *' # 每天北京时间 11:11 自动运行
+    - cron: '40 5 * * *' # 每天北京时间 11:11 自动运行
   workflow_dispatch: # 支持手动点击运行
   push:
     branches:
