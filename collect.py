@@ -43,36 +43,55 @@ def send_to_tg(message):
 
 def main():
     all_ips = set()
-    if not os.path.exists(SOURCE_FILE):
-        send_to_tg("❌ 错误：找不到 sources.txt")
-        return
+    # 记录抓取失败的源，方便排查
+    failed_sources = []
 
     with open(SOURCE_FILE, "r", encoding="utf-8") as f:
         urls = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
 
     for url in urls:
         try:
-            res = requests.get(url, timeout=20)
+            # 增加 User-Agent 模拟浏览器
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+            res = requests.get(url, headers=headers, timeout=20)
+            res.raise_for_status() # 如果状态码不是 200，直接抛出异常
+            
+            # 匹配格式：IP:端口#备注
             found = re.findall(r'\d+\.\d+\.\d+\.\d+:\d+#?\S*', res.text)
-            if found: all_ips.update(found)
-        except: continue
+            if found: 
+                all_ips.update(found)
+            else:
+                failed_sources.append(url)
+        except Exception as e:
+            failed_sources.append(f"{url} ({str(e)})")
+            continue
 
     final_list = sorted(list(all_ips))
+    
+    # 检查是否有实质性更新
+    if os.path.exists(OUTPUT_FILE):
+        with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+            old_data = f.read().splitlines()
+        if set(old_data) == all_ips:
+            print("数据未变化，跳过推送")
+            return
+
     if final_list:
         with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
             f.write("\n".join(final_list))
         
-        # --- 同步到 R2 ---
         r2_status = upload_to_r2()
         
-        # --- 组织战报 ---
+        # 战报里加上失败统计
+        error_info = f"❌ *失败源*: `{len(failed_sources)}` 个" if failed_sources else "✅ *源抓取全通*"
+        
         msg = (f"🚀 *IP 工厂生产完毕*\n"
                f"----------------------------\n"
                f"📦 *入库数量*: `{len(final_list)}` 个\n"
-               f"☁️ *R2 存储状态*: {r2_status}\n"
-               f"⏰ *完成时间*: {os.popen('date').read().strip()}\n"
-               f"----------------------------\n"
-               f"✨ _GitHub 仓库也已同步保存_")
+               f"📡 *抓取状态*: {error_info}\n"
+               f"☁️ *R2 状态*: {r2_status}\n"
+               f"⏰ *北京时间*: {os.popen('date').read().strip()}\n"
+               f"----------------------------")
         send_to_tg(msg)
     else:
         send_to_tg("⚠️ 今日份搬运失败：没抓到有效 IP。")
