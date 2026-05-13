@@ -2,12 +2,13 @@ name: Global IP Factory
 
 on:
   schedule:
-    - cron: '40 5 * * *' # 每天北京时间 11:11 自动运行
+    - cron: '27 7 * * *' # 北京时间 15:27 (7:27 UTC)
   workflow_dispatch: # 支持手动点击运行
   push:
     branches:
-      - main  # 只要有代码推送，就强制触发一次，顺便激活 cron
-# 全局环境变量：强制指定 Node 24 运行环境，压制大部分弃用警告
+      - main  # 只要有代码推送，就触发，顺便激活 cron
+
+# 全局环境变量
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -19,11 +20,9 @@ jobs:
 
     steps:
       - name: Checkout
-        # 使用精准小版本号，避开 Node 20 关联警告
         uses: actions/checkout@v4.1.7
 
       - name: Set up Python
-        # 使用精准小版本号，适配最新的 Node 运行环境
         uses: actions/setup-python@v5.1.1
         with:
           python-version: '3.9'
@@ -34,7 +33,6 @@ jobs:
           pip install requests boto3
 
       - name: Run Factory
-        # 核心：必须映射 Secrets 变量，机器人才能在代码里拿到 Token 和 ID
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
@@ -49,12 +47,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          # 防止由于远程仓库有变动导致的推送失败
           git pull origin main --rebase || echo "不需要拉取"
           
+          # 检查文件是否存在，防止初次运行报错
+          touch ips.txt
           git add ips.txt
           
-          # 检查是否有内容变更，避免空提交
           if git diff --staged --quiet; then
             echo "今日份 IP 数据无变化，无需更新。"
           else
