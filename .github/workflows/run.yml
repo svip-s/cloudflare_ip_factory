@@ -1,4 +1,4 @@
-Name: Global IP Factory
+name: Global IP Factory
 
 on:
   schedule:
@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5.1.1
         with:
-          python-version: '3.11' # 推荐升级到 3.11（或 3.12），避免 Ubuntu 26.04 找不到旧版 Python
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
